@@ -10,4 +10,5 @@ Rails.application.routes.draw do
   get "*repo",                  to: redirect("repo/%{repo}"),              constraints: { repo: /.+/ }
 
   delete "repo/*repo/tag/*tag", to: "tags#destroy",                        constraints: { repo: /.+/, tag: /[^\/]+/ }
+  delete "repo/*repo/tags/bulk_delete", to: "tags#bulk_destroy",           constraints: { repo: /.+/ }, as: :bulk_delete_tags
 end

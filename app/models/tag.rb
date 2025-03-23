@@ -19,9 +19,14 @@ class Tag < Resource
     super
 
     self.manifests = fetch_manifests.sort_by(&:architecture)
+  rescue Faraday::ResourceNotFound
+    # If manifest doesn't exist, we can still delete the tag
+    self.manifests = []
+    self.content_digest = nil
   end
 
   def delete
+    return false unless content_digest
     client.delete("/v2/#{repository.name}/manifests/#{content_digest}").success?
   end
 
